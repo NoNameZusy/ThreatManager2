@@ -22,16 +22,16 @@ def load_threats():
 
 def create_threat():
     clear_screen()
-    name = raw_input("Name : ")  # Python 2'de `input` yerine `raw_input` kullanılır
+    name = input("Name : ")  # Python 3'te `input` kullanılır
     if not name:
         print(Fore.RED + "[ERROR]" + Fore.WHITE + " Please enter a name")
-        raw_input("Press Enter to continue...")  # `input` yerine `raw_input`
+        input("Press Enter to continue...")  # `raw_input` yerine `input`
         create_threat()
         return
-    surname = raw_input("Surname : ")
+    surname = input("Surname : ")
     
     while True:
-        age_input = raw_input("Age : ")
+        age_input = input("Age : ")
         if age_input == '' or age_input.isdigit(): 
             if age_input:
                 age = int(age_input)
@@ -42,27 +42,27 @@ def create_threat():
             print(Fore.RED + "[ERROR]" + Fore.WHITE + " Please enter a valid age (numeric) or leave blank.")
     
     while True:
-        phone_input = raw_input("Phone Number : ")
+        phone_input = input("Phone Number : ")
         if phone_input == '' or not phone_input.replace(' ', '').isalpha():
             phone_number = phone_input or 'Unknown'
             break
         else:
             print(Fore.RED + "[ERROR]" + Fore.WHITE + " Please enter a valid phone number (numeric) or leave blank.")
     
-    social_media = raw_input("Social Media Accounts : ")
-    IP = raw_input("Enter IP Address: ")
+    social_media = input("Social Media Accounts : ")
+    IP = input("Enter IP Address: ")
     database[name.lower()] = {'Surname': surname or 'Unknown', 'Age': age or 'Unknown', 'Phone Number': phone_number or 'Unknown', 'Social Media Accounts': social_media or 'Unknown', 'IP Address': IP or 'Unknown'}
     save_threats()
     print("Threat saved successfully!")
 
 def found():
-    name_to_search = raw_input("Enter the name to search: ").lower()
+    name_to_search = input("Enter the name to search: ").lower()
     if name_to_search in database:
         print("Name: {}".format(name_to_search))
         for key, value in database[name_to_search].items():
             print("{}: {}".format(key, value))
         print("\n[1] Edit\n[99] Delete")
-        choice = raw_input("Enter your choice: ")
+        choice = input("Enter your choice: ")
         if choice == '1':
             edit_threat(name_to_search)
         elif choice == '99':
@@ -71,7 +71,7 @@ def found():
         similar_names = get_close_matches(name_to_search, database.keys())
         if similar_names:
             print("Name not found. Did you mean {}?".format(', '.join(similar_names)))
-            choice = raw_input("[Y/n] ").lower()
+            choice = input("[Y/n] ").lower()
             if choice == 'y':
                 for name in similar_names:
                     print("\nName : {}".format(name))
@@ -81,11 +81,11 @@ def found():
             print(Fore.RED + "Name not found." + Fore.WHITE)
 
 def edit_threat(name_to_edit):
-    surname = raw_input("Enter new Surname: ")
-    age = raw_input("Enter new Age: ")
-    phone_number = raw_input("Enter new Phone Number: ")
-    social_media = raw_input("Enter new Social Media Accounts: ")
-    IP = raw_input("Enter new IP Address: ")
+    surname = input("Enter new Surname: ")
+    age = input("Enter new Age: ")
+    phone_number = input("Enter new Phone Number: ")
+    social_media = input("Enter new Social Media Accounts: ")
+    IP = input("Enter new IP Address: ")
     database[name_to_edit] = {'Surname': surname or 'Unknown', 'Age': age or 'Unknown', 'Phone Number': phone_number or 'Unknown', 'Social Media Accounts': social_media or 'Unknown', 'IP Address': IP or 'Unknown'}
     save_threats()
     print("Threat edited successfully.")
@@ -102,7 +102,7 @@ def saved_threats():
         sorted_names = list(reversed(database.keys())) 
         for index, name in enumerate(sorted_names, 1):
             print("{}. {}".format(index, name))
-        choice = raw_input("Enter the number of the threat to view details: ").strip()
+        choice = input("Enter the number of the threat to view details: ").strip()
         if choice == '':
             return
         elif choice.isdigit() and 0 < int(choice) <= len(sorted_names):
@@ -113,7 +113,7 @@ def saved_threats():
             for key, value in database[selected_threat].items():
                 print("{}: {}".format(key, value))
             print("\n[1] Edit\n[99] Delete")
-            choice = raw_input("Enter your choice: ")
+            choice = input("Enter your choice: ")
             if choice == '1':
                 edit_threat(selected_threat)
             elif choice == '99':
@@ -145,19 +145,19 @@ def main():
         print("")
 
         print("[0] Exit\n[1] Create Threat\n[2] Found\n[3] Saved Threats\n")
-        choice = raw_input("Enter your choice: ")
+        choice = input("Enter your choice: ")
 
         if choice == '0':
             signal_handler(None, None)
         elif choice == '1':
             create_threat()
-            raw_input("Press Enter to continue...")
+            input("Press Enter to continue...")
         elif choice == '2':
             found()
-            raw_input("Press Enter to continue...")
+            input("Press Enter to continue...")
         elif choice == '3':
             saved_threats()
-            raw_input("Press Enter to continue...")
+            input("Press Enter to continue...")
         else:
             print(Fore.RED + "[ERROR]" + Fore.WHITE + " Invalid choice. Please enter a valid option.")
 
