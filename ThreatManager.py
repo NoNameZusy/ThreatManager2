@@ -22,7 +22,7 @@ def load_threats():
 
 def create_threat():
     clear_screen()
-    name = raw_input("Name : ")  # Python 2'de `input` yerine `raw_input` kullanılıyor
+    name = raw_input("Name : ")  # Python 2'de `input` yerine `raw_input` kullanılır
     if not name:
         print(Fore.RED + "[ERROR]" + Fore.WHITE + " Please enter a name")
         raw_input("Press Enter to continue...")  # `input` yerine `raw_input`
@@ -51,7 +51,7 @@ def create_threat():
     
     social_media = raw_input("Social Media Accounts : ")
     IP = raw_input("Enter IP Address: ")
-    database[name.lower()] = {'Surname': surname or 'Unknown', 'Age': age or 'Unknown', 'Phone Number': phone_number or 'Unknown', 'Social Media Accounts': social_media or 'Unknown', 'IP Address' : IP or 'Unknown'}
+    database[name.lower()] = {'Surname': surname or 'Unknown', 'Age': age or 'Unknown', 'Phone Number': phone_number or 'Unknown', 'Social Media Accounts': social_media or 'Unknown', 'IP Address': IP or 'Unknown'}
     save_threats()
     print("Threat saved successfully!")
 
@@ -86,7 +86,7 @@ def edit_threat(name_to_edit):
     phone_number = raw_input("Enter new Phone Number: ")
     social_media = raw_input("Enter new Social Media Accounts: ")
     IP = raw_input("Enter new IP Address: ")
-    database[name_to_edit] = {'Surname': surname or 'Unknown', 'Age': age or 'Unknown', 'Phone Number': phone_number or 'Unknown', 'Social Media Accounts': social_media or 'Unknown', 'IP Address' : IP or 'Unknown'}
+    database[name_to_edit] = {'Surname': surname or 'Unknown', 'Age': age or 'Unknown', 'Phone Number': phone_number or 'Unknown', 'Social Media Accounts': social_media or 'Unknown', 'IP Address': IP or 'Unknown'}
     save_threats()
     print("Threat edited successfully.")
 
@@ -99,7 +99,7 @@ def saved_threats():
     if database:
         clear_screen()
         print("Saved Threats:")
-        sorted_names = list(reversed(list(database.keys()))) 
+        sorted_names = list(reversed(database.keys())) 
         for index, name in enumerate(sorted_names, 1):
             print("{}. {}".format(index, name))
         choice = raw_input("Enter the number of the threat to view details: ").strip()
