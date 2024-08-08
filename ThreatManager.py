@@ -3,7 +3,6 @@ import json
 from difflib import get_close_matches
 
 database = {}
-
 file_name = "threats.json"
 
 def clear_screen():
@@ -23,27 +22,27 @@ def create_threat():
     clear_screen()
     name = input("Name: ")
     if not name:
-        print("Please enter a name")
+        print("[ERROR] Please enter a name")
         input("Press Enter to continue...")
         create_threat()
         return
     surname = input("Surname: ")
-    
+
     while True:
         age_input = input("Age: ")
         if age_input == '' or age_input.isdigit(): 
             age = int(age_input) if age_input else 'Unknown'
             break
         else:
-            print("Please enter a valid age (numeric) or leave blank.")
+            print("[ERROR] Please enter a valid age (numeric) or leave blank.")
     
     while True:
         phone_input = input("Phone Number: ")
-        if phone_input == '' or not phone_input.replace(' ', '').isalpha():
+        if phone_input == '' or phone_input.isdigit():
             phone_number = phone_input or 'Unknown'
             break
         else:
-            print("Please enter a valid phone number (numeric) or leave blank.")
+            print("[ERROR] Please enter a valid phone number (numeric) or leave blank.")
     
     social_media = input("Social Media Accounts: ")
     IP = input("Enter IP Address: ")
@@ -60,9 +59,9 @@ def create_threat():
 def found():
     name_to_search = input("Enter the name to search: ").lower()
     if name_to_search in database:
-        print("Name: {}".format(name_to_search))
+        print(f"Name: {name_to_search}")
         for key, value in database[name_to_search].items():
-            print("{}: {}".format(key, value))
+            print(f"{key}: {value}")
         print("\n[1] Edit\n[99] Delete")
         choice = input("Enter your choice: ")
         if choice == '1':
@@ -72,15 +71,15 @@ def found():
     else:
         similar_names = get_close_matches(name_to_search, database.keys())
         if similar_names:
-            print("Name not found. Did you mean {}?".format(', '.join(similar_names)))
+            print(f"Name not found. Did you mean {', '.join(similar_names)}?")
             choice = input("[Y/n] ").lower()
             if choice == 'y':
                 for name in similar_names:
-                    print("\nName: {}".format(name))
+                    print(f"\nName: {name}")
                     for key, value in database[name].items():
-                        print("{}: {}".format(key, value))
+                        print(f"{key}: {value}")
         else:
-            print("Name not found.")
+            print("[ERROR] Name not found.")
 
 def edit_threat(name_to_edit):
     surname = input("Enter new Surname: ")
@@ -107,9 +106,9 @@ def saved_threats():
     if database:
         clear_screen()
         print("Saved Threats:")
-        sorted_names = list(reversed(database.keys())) 
+        sorted_names = list(reversed(list(database.keys())))
         for index, name in enumerate(sorted_names, 1):
-            print("{}. {}".format(index, name))
+            print(f"{index}. {name}")
         choice = input("Enter the number of the threat to view details: ").strip()
         if choice == '':
             return
@@ -117,9 +116,9 @@ def saved_threats():
             choice = int(choice)
             selected_threat = sorted_names[choice - 1]
             clear_screen()
-            print("Details of {}:".format(selected_threat))
+            print(f"Details of {selected_threat}:")
             for key, value in database[selected_threat].items():
-                print("{}: {}".format(key, value))
+                print(f"{key}: {value}")
             print("\n[1] Edit\n[99] Delete")
             choice = input("Enter your choice: ")
             if choice == '1':
@@ -127,7 +126,7 @@ def saved_threats():
             elif choice == '99':
                 delete_threat(selected_threat)
         else:
-            print("Invalid input. Please enter a valid threat number.")
+            print("[ERROR] Invalid input. Please enter a valid threat number.")
     else:
         print("No threats saved.")
 
@@ -146,8 +145,12 @@ def main():
     load_threats()
     while True:
         clear_screen()
-        print("Threat Management System")
+        print("▀█▀ █░█ █▀▀▄ █▀ ▄▀▄ ▀█▀")
+        print("░█░ █▀█ █▐█▀ █▀ █▀█ ░█░")
+        print("░▀░ ▀░▀ ▀░▀▀ ▀▀ ▀░▀ ░▀░")
+        print("----{By No_Name.exe}----")
         print("")
+
         print("[0] Exit\n[1] Create Threat\n[2] Found\n[3] Saved Threats\n")
         choice = input("Enter your choice: ")
 
@@ -163,7 +166,7 @@ def main():
             saved_threats()
             input("Press Enter to continue...")
         else:
-            print("Invalid choice. Please enter a valid option.")
+            print("[ERROR] Invalid choice. Please enter a valid option.")
 
 if __name__ == "__main__":
     main()
