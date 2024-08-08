@@ -1,7 +1,6 @@
 import os
 import json
 from difflib import get_close_matches
-from colorama import Fore
 
 database = {}
 
@@ -22,36 +21,39 @@ def load_threats():
 
 def create_threat():
     clear_screen()
-    name = input("Name : ")  # Python 3'te `input` kullanılır
+    name = input("Name: ")
     if not name:
-        print(Fore.RED + "[ERROR]" + Fore.WHITE + " Please enter a name")
-        input("Press Enter to continue...")  # `raw_input` yerine `input`
+        print("Please enter a name")
+        input("Press Enter to continue...")
         create_threat()
         return
-    surname = input("Surname : ")
+    surname = input("Surname: ")
     
     while True:
-        age_input = input("Age : ")
+        age_input = input("Age: ")
         if age_input == '' or age_input.isdigit(): 
-            if age_input:
-                age = int(age_input)
-            else:
-                age = 'Unknown'
+            age = int(age_input) if age_input else 'Unknown'
             break
         else:
-            print(Fore.RED + "[ERROR]" + Fore.WHITE + " Please enter a valid age (numeric) or leave blank.")
+            print("Please enter a valid age (numeric) or leave blank.")
     
     while True:
-        phone_input = input("Phone Number : ")
+        phone_input = input("Phone Number: ")
         if phone_input == '' or not phone_input.replace(' ', '').isalpha():
             phone_number = phone_input or 'Unknown'
             break
         else:
-            print(Fore.RED + "[ERROR]" + Fore.WHITE + " Please enter a valid phone number (numeric) or leave blank.")
+            print("Please enter a valid phone number (numeric) or leave blank.")
     
-    social_media = input("Social Media Accounts : ")
+    social_media = input("Social Media Accounts: ")
     IP = input("Enter IP Address: ")
-    database[name.lower()] = {'Surname': surname or 'Unknown', 'Age': age or 'Unknown', 'Phone Number': phone_number or 'Unknown', 'Social Media Accounts': social_media or 'Unknown', 'IP Address': IP or 'Unknown'}
+    database[name.lower()] = {
+        'Surname': surname or 'Unknown',
+        'Age': age or 'Unknown',
+        'Phone Number': phone_number or 'Unknown',
+        'Social Media Accounts': social_media or 'Unknown',
+        'IP Address': IP or 'Unknown'
+    }
     save_threats()
     print("Threat saved successfully!")
 
@@ -74,11 +76,11 @@ def found():
             choice = input("[Y/n] ").lower()
             if choice == 'y':
                 for name in similar_names:
-                    print("\nName : {}".format(name))
+                    print("\nName: {}".format(name))
                     for key, value in database[name].items():
                         print("{}: {}".format(key, value))
         else:
-            print(Fore.RED + "Name not found." + Fore.WHITE)
+            print("Name not found.")
 
 def edit_threat(name_to_edit):
     surname = input("Enter new Surname: ")
@@ -86,7 +88,13 @@ def edit_threat(name_to_edit):
     phone_number = input("Enter new Phone Number: ")
     social_media = input("Enter new Social Media Accounts: ")
     IP = input("Enter new IP Address: ")
-    database[name_to_edit] = {'Surname': surname or 'Unknown', 'Age': age or 'Unknown', 'Phone Number': phone_number or 'Unknown', 'Social Media Accounts': social_media or 'Unknown', 'IP Address': IP or 'Unknown'}
+    database[name_to_edit] = {
+        'Surname': surname or 'Unknown',
+        'Age': age or 'Unknown',
+        'Phone Number': phone_number or 'Unknown',
+        'Social Media Accounts': social_media or 'Unknown',
+        'IP Address': IP or 'Unknown'
+    }
     save_threats()
     print("Threat edited successfully.")
 
@@ -119,7 +127,7 @@ def saved_threats():
             elif choice == '99':
                 delete_threat(selected_threat)
         else:
-            print(Fore.RED + "[ERROR]" + Fore.WHITE + " Invalid input. Please enter a valid threat number.")
+            print("Invalid input. Please enter a valid threat number.")
     else:
         print("No threats saved.")
 
@@ -138,12 +146,8 @@ def main():
     load_threats()
     while True:
         clear_screen()
-        print("▀█▀ █░█ █▀▀▄ █▀ ▄▀▄ ▀█▀")
-        print("░█░ █▀█ █▐█▀ █▀ █▀█ ░█░")
-        print("░▀░ ▀░▀ ▀░▀▀ ▀▀ ▀░▀ ░▀░")
-        print("----{By No_Name.exe}----")
+        print("Threat Management System")
         print("")
-
         print("[0] Exit\n[1] Create Threat\n[2] Found\n[3] Saved Threats\n")
         choice = input("Enter your choice: ")
 
@@ -159,7 +163,7 @@ def main():
             saved_threats()
             input("Press Enter to continue...")
         else:
-            print(Fore.RED + "[ERROR]" + Fore.WHITE + " Invalid choice. Please enter a valid option.")
+            print("Invalid choice. Please enter a valid option.")
 
 if __name__ == "__main__":
     main()
