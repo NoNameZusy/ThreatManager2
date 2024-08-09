@@ -1,9 +1,9 @@
+# -*- coding: utf-8 -*-
 import os
 import json
-import signal
 from difflib import get_close_matches
+from colorama import Fore
 
-# 'colorama' kütüphanesi Python 3.2.3 ile uyumlu olmayabilir. Bu yüzden basit string ile renklendirme kaldırılıyor.
 database = {}
 
 file_name = "threats.json"
@@ -25,7 +25,7 @@ def create_threat():
     clear_screen()
     name = input("Name : ")
     if not name:
-        print("[ERROR] Please enter a name")
+        print(Fore.RED + "[ERROR]" + Fore.WHITE + " Please enter a name")
         input("Press Enter to continue...")
         create_threat()
         return
@@ -40,7 +40,7 @@ def create_threat():
                 age = 'Unknown'
             break
         else:
-            print("[ERROR] Please enter a valid phone number (numeric) or leave blank.")
+            print(Fore.RED + "[ERROR]" + Fore.WHITE + " Please enter a valid age (numeric) or leave blank.")
     
     while True:
         phone_input = input("Phone Number : ")
@@ -48,26 +48,20 @@ def create_threat():
             phone_number = phone_input or 'Unknown'
             break
         else:
-            print("[ERROR] Please enter a valid phone number (numeric) or leave blank.")
+            print(Fore.RED + "[ERROR]" + Fore.WHITE + " Please enter a valid phone number (numeric) or leave blank.")
     
     social_media = input("Social Media Accounts : ")
-    IP = input("Enter IP Adress: ")
-    database[name.lower()] = {
-        'Surname': surname or 'Unknown', 
-        'Age': age, 
-        'Phone Number': phone_number, 
-        'Social Media Accounts': social_media or 'Unknown', 
-        'IP Adress': IP or 'Unknown'
-    }
+    IP = input("Enter IP Address: ")
+    database[name.lower()] = {'Surname': surname or 'Unknown', 'Age': age or 'Unknown', 'Phone Number': phone_number or 'Unknown', 'Social Media Accounts': social_media or 'Unknown', 'IP Address' : IP or 'Unknown'}
     save_threats()
     print("Threat saved successfully!")
 
 def found():
     name_to_search = input("Enter the name to search: ").lower()
     if name_to_search in database:
-        print("Name: {}".format(name_to_search))
+        print(f"Name: {name_to_search}")
         for key, value in database[name_to_search].items():
-            print("{}: {}".format(key, value))
+            print(f"{key}: {value}")
         print("\n[1] Edit\n[99] Delete")
         choice = input("Enter your choice: ")
         if choice == '1':
@@ -77,29 +71,23 @@ def found():
     else:
         similar_names = get_close_matches(name_to_search, database.keys())
         if similar_names:
-            print("Name not found. Did you mean {}?".format(", ".join(similar_names)))
+            print(f"Name not found. Did you mean {', '.join(similar_names)}?")
             choice = input("[Y/n] ").lower()
             if choice == 'y':
                 for name in similar_names:
-                    print("\nName : {}".format(name))
+                    print(f"\nName : {name}")
                     for key, value in database[name].items():
-                        print("{}: {}".format(key, value))
+                        print(f"{key}: {value}")
         else:
-            print("Name not found.")
+            print(Fore.RED +"Name not found." + Fore.WHITE)
 
 def edit_threat(name_to_edit):
     surname = input("Enter new Surname: ")
     age = input("Enter new Age: ")
     phone_number = input("Enter new Phone Number: ")
     social_media = input("Enter new Social Media Accounts: ")
-    IP = input("Enter new IP Adress: ")
-    database[name_to_edit] = {
-        'Surname': surname or 'Unknown', 
-        'Age': age or 'Unknown', 
-        'Phone Number': phone_number or 'Unknown', 
-        'Social Media Accounts': social_media or 'Unknown', 
-        'IP Adress': IP or 'Unknown'
-    }
+    IP = input("Enter new IP Address: ")
+    database[name_to_edit] = {'Surname': surname or 'Unknown', 'Age': age or 'Unknown', 'Phone Number': phone_number or 'Unknown', 'Social Media Accounts': social_media or 'Unknown', 'IP Address' : IP or 'Unknown'}
     save_threats()
     print("Threat edited successfully.")
 
@@ -114,7 +102,7 @@ def saved_threats():
         print("Saved Threats:")
         sorted_names = list(reversed(list(database.keys()))) 
         for index, name in enumerate(sorted_names, 1):
-            print("{}. {}".format(index, name))
+            print(f"{index}. {name}")
         choice = input("Enter the number of the threat to view details: ").strip()
         if choice == '':
             return
@@ -122,9 +110,9 @@ def saved_threats():
             choice = int(choice)
             selected_threat = sorted_names[choice - 1]
             clear_screen()
-            print("Details of {}:".format(selected_threat))
+            print(f"Details of {selected_threat}:")
             for key, value in database[selected_threat].items():
-                print("{}: {}".format(key, value))
+                print(f"{key}: {value}")
             print("\n[1] Edit\n[99] Delete")
             choice = input("Enter your choice: ")
             if choice == '1':
@@ -132,9 +120,11 @@ def saved_threats():
             elif choice == '99':
                 delete_threat(selected_threat)
         else:
-            print("[ERROR] Invalid input. Please enter a valid threat number.")
+            print(Fore.RED + "[ERROR]" + Fore.WHITE + " Invalid input. Please enter a valid threat number.")
     else:
         print("No threats saved.")
+
+import signal
 
 def signal_handler(signal, frame):
     print("\nExiting...")
@@ -170,7 +160,7 @@ def main():
             saved_threats()
             input("Press Enter to continue...")
         else:
-            print("[ERROR] Invalid choice. Please enter a valid option.")
+            print(Fore.RED + "[ERROR]" + Fore.WHITE + " Invalid choice. Please enter a valid option.")
 
 if __name__ == "__main__":
     main()
